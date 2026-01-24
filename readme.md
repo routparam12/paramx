@@ -1,4 +1,4 @@
-# Portfolio AI – Ask About Me
+# Paramx – Ask About Me
 
 An AI-powered portfolio feature that allows visitors to ask questions about me and receive accurate answers generated strictly from my personal data (experience, projects, skills).
 
