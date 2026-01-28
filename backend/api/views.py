@@ -2,8 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from rag.retriever import test_retrieval
+
+from rag.retriever import retrieve_documents, build_context
+from rag.prompt import build_prompt
 from llm.factory import get_llm
+from rag.answer import clean_answer
 
 
 @api_view(["GET"])
@@ -29,16 +32,26 @@ def ask_question(request):
         )
 
     try:
-        docs = test_retrieval(question)
+        # 1. Retrieve documents
+        docs = retrieve_documents(question, k=3)
 
-        context = "\n\n".join(d.page_content for d in docs[:3])
+        # 2. Build clean context
+        context = build_context(docs)
 
+        # 3. Build strict prompt
+        prompt = build_prompt(question, context)
+
+        # 4. Call LocalLLM via .generate
         llm = get_llm()
-        answer = llm.generate_answer(question, context)
+        raw_answer = llm.generate(prompt)
+        answer = clean_answer(raw_answer)
 
+        
         return Response({
             "answer": answer,
-            "sources": list(set(d.metadata.get("source", "unknown") for d in docs))
+            "sources": list(set(
+                d.metadata.get("source", "unknown") for d in docs
+            ))
         })
 
     except Exception as e:

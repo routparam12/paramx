@@ -114,3 +114,19 @@ Response:
 
 { "message": "Hello from React" }
 
+## Current Capabilities
+- Retrieval-Augmented Generation (FAISS)
+- Modular LLM interface
+- Prompt-controlled answering
+- Source attribution
+- Safe answer sanitization
+
+## Known Limitations
+- LocalLLM is a stub (echo only)
+- No real reasoning yet
+- No streaming responses
+
+## Next Milestones
+- Gemini LLM integration
+- Chunk relevance scoring
+- Answer confidence handling

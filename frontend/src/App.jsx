@@ -27,8 +27,10 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("API request failed");
+        const text = await response.text();
+        throw new Error(`API ${response.status}: ${text}`);
       }
+      
 
       const data = await response.json();
       setAnswer(data.answer);
